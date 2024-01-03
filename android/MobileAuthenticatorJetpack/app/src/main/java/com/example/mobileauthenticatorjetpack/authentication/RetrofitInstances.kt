@@ -11,9 +11,11 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import java.util.Date
 import javax.inject.Singleton
 
 val BASE_URL = "http://192.168.1.201:8000/api/"
@@ -62,6 +64,32 @@ data class MeResponse(
     val email: String
 )
 
+interface DeviceService {
+    @GET("users/devices")
+    suspend fun getDevices(): Response<List<DeviceDto>>
+
+    @GET("users/devices/{deviceId}")
+    suspend fun getDevice(deviceId: String): Response<DeviceDto>
+
+    @POST("users/devices")
+    suspend fun addDevice(@Body body: AddDeviceRequest): Response<DeviceDto>
+
+    @DELETE("users/devices/{deviceId}")
+    suspend fun deleteDevice(deviceId: String): Void
+}
+
+data class DeviceDto(
+    val id: String,
+    val name: String,
+    val createdAt: String
+)
+
+data class AddDeviceRequest(
+    val userPassword: String,
+    val deviceName: String,
+    val devicePublicKey: String
+)
+
 @Module
 @InstallIn(SingletonComponent::class)
 class RetrofitClientModule {
@@ -98,5 +126,17 @@ class RetrofitClientModule {
             .build()
             .create(MeService::class.java)
     }
+
+    @Provides
+    @Singleton
+    fun provideDeviceApi(@AuthenticatedClient okHttpClient: OkHttpClient): DeviceService {
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttpClient)
+            .build()
+            .create(DeviceService::class.java)
+    }
+
 
 }
