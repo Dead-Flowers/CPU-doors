@@ -9,6 +9,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -26,6 +27,39 @@ interface RefreshTokenService {
 
 data class RefreshRequest(
     val refresh: String
+)
+
+interface AuthService {
+    @POST("auth/token/pair")
+    suspend fun login(
+        @Body body: LoginRequest
+    ): Response<AuthNetworkResponse>
+}
+
+data class LoginRequest(
+    val email: String,
+    val password: String
+)
+
+data class AuthNetworkResponse(
+    val email: String,
+    val refresh: String,
+    val access: String
+)
+
+data class RefreshNetworkResponse(
+    val refresh: String,
+    val access: String
+)
+
+interface MeService {
+    @GET("users/me")
+    suspend fun getMe(): Response<MeResponse>
+}
+
+data class MeResponse(
+    val id: String,
+    val email: String
 )
 
 @Module
@@ -54,27 +88,15 @@ class RetrofitClientModule {
             .create(AuthService::class.java)
     }
 
+    @Provides
+    @Singleton
+    fun provideMeApi(@AuthenticatedClient okHttpClient: OkHttpClient): MeService {
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttpClient)
+            .build()
+            .create(MeService::class.java)
+    }
+
 }
-
-interface AuthService {
-    @POST("auth/token/pair")
-    suspend fun login(
-        @Body body: LoginRequest
-    ): Response<AuthNetworkResponse>
-}
-
-data class LoginRequest(
-    val email: String,
-    val password: String
-)
-
-data class AuthNetworkResponse(
-    val email: String,
-    val refresh: String,
-    val access: String
-)
-
-data class RefreshNetworkResponse(
-    val refresh: String,
-    val access: String
-)

@@ -1,8 +1,6 @@
 package com.example.mobileauthenticatorjetpack.interfaces
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -44,16 +42,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.mobileauthenticatorjetpack.LoginViewModel
-import com.example.mobileauthenticatorjetpack.MainActivity
-import com.example.mobileauthenticatorjetpack.authentication.AuthService
-import com.example.mobileauthenticatorjetpack.authentication.JwtTokenManager
-import com.example.mobileauthenticatorjetpack.authentication.LoginRequest
-import kotlinx.coroutines.runBlocking
-import okhttp3.internal.wait
-import retrofit2.Retrofit
 
 
 @Composable
