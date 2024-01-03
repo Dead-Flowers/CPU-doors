@@ -71,6 +71,7 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
     implementation("com.google.android.datatransport:transport-runtime:3.2.0")
     implementation("com.google.dagger:hilt-android:2.50")
+    implementation("androidx.biometric:biometric:1.1.0")
     kapt("com.google.dagger:hilt-android-compiler:2.50")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

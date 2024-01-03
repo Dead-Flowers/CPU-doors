@@ -29,6 +29,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,10 +49,9 @@ import com.example.mobileauthenticatorjetpack.LoginViewModel
 
 @Composable
 fun LoginForm(viewModel: LoginViewModel) {
+    var credentials by remember { mutableStateOf(Credentials()) }
+    val context = LocalContext.current
     Surface {
-        var credentials by remember { mutableStateOf(Credentials()) }
-        val context = LocalContext.current
-
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -83,7 +83,7 @@ fun LoginForm(viewModel: LoginViewModel) {
                       if (!checkCredentials(credentials, context)) {
                           credentials = Credentials()
                       } else {
-                          val unit = viewModel.login(credentials, context)
+                          viewModel.login(credentials, context)
                       }
                 },
                 enabled = true,
@@ -93,6 +93,10 @@ fun LoginForm(viewModel: LoginViewModel) {
                 Text("Login")
             }
         }
+    }
+    DisposableEffect(Unit) {
+        viewModel.useRefreshToken(context)
+        onDispose {}
     }
 }
 
