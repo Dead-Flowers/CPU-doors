@@ -2,6 +2,8 @@ package com.example.mobileauthenticator.deviceDetail
 
 import android.content.Intent
 import android.os.Bundle
+import android.security.keystore.KeyGenParameterSpec
+import android.security.keystore.KeyProperties
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -13,7 +15,9 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobileauthenticator.R
 import com.example.mobileauthenticator.devicesList.DEVICE_ID
+import java.security.KeyPairGenerator
 import java.util.concurrent.Executor
+import javax.crypto.SecretKeyFactory
 
 
 class DeviceDetailActivity : AppCompatActivity() {
@@ -46,6 +50,21 @@ class DeviceDetailActivity : AppCompatActivity() {
         }
 
         executor = ContextCompat.getMainExecutor(this)
+        val keyGenerator = KeyPairGenerator.getInstance(KeyProperties.KEY_ALGORITHM_RSA, "AndroidKeyStore")
+        val keyGenParameterSpec = KeyGenParameterSpec.Builder("myKeyAlias",
+            KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
+            .setDigests(KeyProperties.DIGEST_SHA256, KeyProperties.DIGEST_SHA512)
+            .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_PKCS1)
+            .setUserAuthenticationRequired(true)
+            .build()
+
+        keyGenerator.initialize(keyGenParameterSpec)
+        val keyPair = keyGenerator.generateKeyPair()
+
+        Toast.makeText(applicationContext,
+            "Authentication error: ${keyPair.public}", Toast.LENGTH_SHORT)
+            .show()
+
         biometricPrompt = BiometricPrompt(this, executor,
             object : BiometricPrompt.AuthenticationCallback() {
                 override fun onAuthenticationError(errorCode: Int,
@@ -59,8 +78,16 @@ class DeviceDetailActivity : AppCompatActivity() {
                 override fun onAuthenticationSucceeded(
                     result: BiometricPrompt.AuthenticationResult) {
                     super.onAuthenticationSucceeded(result)
+//                    Toast.makeText(applicationContext,
+//                        "Authentication succeeded!", Toast.LENGTH_SHORT)
+//                        .show()
                     Toast.makeText(applicationContext,
-                        "Authentication succeeded!", Toast.LENGTH_SHORT)
+                        "Public key: ${keyPair.public.encoded.asIterable().map { byt ->
+                            byt.toString(
+                                16
+                            )
+                        }.joinToString("")
+                        }", Toast.LENGTH_SHORT)
                         .show()
 
                     if (currentDeviceId != null) {
@@ -77,6 +104,7 @@ class DeviceDetailActivity : AppCompatActivity() {
                         .show()
                 }
             })
+
 
         promptInfo = BiometricPrompt.PromptInfo.Builder()
             .setTitle("Biometric login for my app")
