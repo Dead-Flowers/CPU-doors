@@ -5,7 +5,7 @@ from ninja_jwt.authentication import JWTAuth
 
 from controllers.models import ControllerDevice, ControllerDeviceStateEvent
 from controllers.schemas import ControllerDeviceState
-from users.helpers import UserDeviceChallengeSchema
+from users.helpers import UserDeviceChallengeSchema, validate_device_challenge
 
 
 router = Router(
@@ -44,6 +44,6 @@ def get_controller(request, id: uuid.UUID):
 @router.post("/{id}/set-state", response=ControllerSchema)
 def set_controller_state(request, id: uuid.UUID, body: AuthorizeSetStateRequest):
     controller = get_controller(request, id)
-    
+    validate_device_challenge(request, body)
     return controller
 
