@@ -24,8 +24,10 @@ import javax.inject.Singleton
 interface JwtTokenManager {
     suspend fun saveAccessJwt(token: String)
     suspend fun saveRefreshJwt(token: String)
+    suspend fun saveDeviceId(id: String)
     suspend fun getAccessJwt(): String?
     suspend fun getRefreshJwt(): String?
+    suspend fun getDeviceId(): String?
     suspend fun clearAllTokens()
 }
 
@@ -35,6 +37,7 @@ class JwtTokenDataStore @Inject constructor(private val dataStore: DataStore<Pre
     companion object {
         val ACCESS_JWT_KEY = stringPreferencesKey("access_jwt")
         val REFRESH_JWT_KEY = stringPreferencesKey("refresh_jwt")
+        val DEVICE_ID = stringPreferencesKey("device_id")
     }
 
     override suspend fun saveAccessJwt(token: String) {
@@ -46,6 +49,12 @@ class JwtTokenDataStore @Inject constructor(private val dataStore: DataStore<Pre
     override suspend fun saveRefreshJwt(token: String) {
         dataStore.edit { preferences ->
             preferences[REFRESH_JWT_KEY] = token
+        }
+    }
+
+    override suspend fun saveDeviceId(id: String) {
+        dataStore.edit { preferences ->
+            preferences[DEVICE_ID] = id
         }
     }
 
@@ -61,10 +70,17 @@ class JwtTokenDataStore @Inject constructor(private val dataStore: DataStore<Pre
         }.first()
     }
 
+    override suspend fun getDeviceId(): String? {
+        return dataStore.data.map { preferences ->
+            preferences[DEVICE_ID]
+        }.first()
+    }
+
     override suspend fun clearAllTokens() {
         dataStore.edit { preferences ->
             preferences.remove(ACCESS_JWT_KEY)
             preferences.remove(REFRESH_JWT_KEY)
+            preferences.remove(DEVICE_ID)
         }
     }
 }
@@ -87,4 +103,6 @@ class TokenManagementModule {
     fun provideJwtTokenManager(dataStore: DataStore<Preferences>): JwtTokenManager {
         return JwtTokenDataStore(dataStore = dataStore)
     }
+
+
 }

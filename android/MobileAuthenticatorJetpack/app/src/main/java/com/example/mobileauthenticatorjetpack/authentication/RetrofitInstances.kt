@@ -79,7 +79,15 @@ interface DeviceService {
 //    suspend fun deleteDevice(deviceId: String): Void
 
     //TODO: add remove device with POST
+
+    @GET("users/devices/{id}/challenge")
+    suspend fun challengeDevice(@Path(value = "id") id: String): Response<ChallengeDeviceDto>
 }
+
+data class ChallengeDeviceDto(
+    @field:SerializedName("challenge_token")
+    val challengeToken: String
+)
 
 data class DeviceDto(
     val id: String,
@@ -103,7 +111,21 @@ interface ControllersService {
 
     @GET("controllers/{id}")
     suspend fun getController(id: String): Response<ControllerDto>
+
+    @POST("controllers/{id}/set-state")
+    suspend fun setControllerState(@Path(value = "id") id: String, @Body body: SetControllerStateDto): Response<DeviceDto>
 }
+
+data class SetControllerStateDto(
+    @field:SerializedName("challenge_token")
+    val challengeToken: String,
+    @field:SerializedName("challenge_token_signature")
+    val challengeTokenSignature: String,
+    @field:SerializedName("previous_state")
+    val previousState: String,
+    @field:SerializedName("new_state")
+    val newState: String,
+)
 
 data class ControllerDto (
     val id: String,

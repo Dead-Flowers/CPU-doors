@@ -14,20 +14,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.fragment.app.FragmentActivity
 import com.example.mobileauthenticatorjetpack.interfaces.DoorViewList
 import com.example.mobileauthenticatorjetpack.interfaces.MeForm
 import com.example.mobileauthenticatorjetpack.ui.theme.MobileAuthenticatorJetpackTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : FragmentActivity() {
     private val controllersViewModel: ControllersViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MobileAuthenticatorJetpackTheme {
-                // A surface container using the 'background' color from the theme
                 DoorViewList(viewModel = controllersViewModel)
             }
         }

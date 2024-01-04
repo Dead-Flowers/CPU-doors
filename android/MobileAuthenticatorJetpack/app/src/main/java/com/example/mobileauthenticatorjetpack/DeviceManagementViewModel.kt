@@ -18,6 +18,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.mobileauthenticatorjetpack.authentication.AddDeviceRequest
 import com.example.mobileauthenticatorjetpack.authentication.DeviceDto
 import com.example.mobileauthenticatorjetpack.authentication.DeviceService
+import com.example.mobileauthenticatorjetpack.authentication.JwtTokenManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.security.KeyPairGenerator
@@ -26,7 +27,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DeviceManagementViewModel @Inject constructor(
-    private val deviceService: DeviceService
+    private val deviceService: DeviceService,
+    private val jwtTokenManager: JwtTokenManager
 ) : ViewModel() {
 
     val currentDeviceId: MutableState<String?> = mutableStateOf(null);
@@ -50,6 +52,7 @@ class DeviceManagementViewModel @Inject constructor(
                     try {
                         foundDevice = devices.first { dev -> dev.name == deviceName }
                         currentDeviceId.value = foundDevice.id;
+                        jwtTokenManager.saveDeviceId(foundDevice.id)
                         context.startActivity(Intent(context, MainActivity::class.java))
                         (context as Activity).finish()
                         Toast.makeText(
@@ -80,10 +83,9 @@ class DeviceManagementViewModel @Inject constructor(
         }
 
         val keyGenerator = KeyPairGenerator.getInstance(KeyProperties.KEY_ALGORITHM_RSA, "AndroidKeyStore")
-        val keyGenParameterSpec = KeyGenParameterSpec.Builder("myKeyAlias",
-            KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
-            .setDigests(KeyProperties.DIGEST_SHA256, KeyProperties.DIGEST_SHA512)
-            .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_PKCS1)
+        val keyGenParameterSpec = KeyGenParameterSpec.Builder("myKeyAlias", KeyProperties.PURPOSE_SIGN)
+            .setDigests(KeyProperties.DIGEST_SHA256)
+            .setSignaturePaddings(KeyProperties.SIGNATURE_PADDING_RSA_PKCS1)
             .setUserAuthenticationRequired(true)
             .build()
 
@@ -99,6 +101,7 @@ class DeviceManagementViewModel @Inject constructor(
                 ))
                 if (response.isSuccessful && response.body() != null) {
                     currentDeviceId.value = response.body()!!.id
+                    jwtTokenManager.saveDeviceId(response.body()!!.id)
                     context.startActivity(Intent(context, MainActivity::class.java))
                     (context as Activity).finish()
                     Toast.makeText(
