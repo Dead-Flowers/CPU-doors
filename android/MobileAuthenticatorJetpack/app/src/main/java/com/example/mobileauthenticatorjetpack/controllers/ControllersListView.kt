@@ -91,7 +91,7 @@ fun ControllerElement(
 ) {
     Row(
         Modifier
-            .background(Color.hsl(0f, 0f, 0.85f, 1f), RoundedCornerShape(10.dp))
+            .background(MaterialTheme.colorScheme.inverseOnSurface, RoundedCornerShape(10.dp))
             .padding(horizontal = 10.dp)
             .fillMaxWidth()
             .height(96.dp)

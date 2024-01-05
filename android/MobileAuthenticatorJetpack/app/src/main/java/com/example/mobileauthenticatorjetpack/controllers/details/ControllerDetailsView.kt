@@ -58,11 +58,11 @@ fun ControllerDetailsView(
         },
     ) {
         innerPadding -> LazyColumn (
+        verticalArrangement = Arrangement.spacedBy(4.dp),
         modifier = Modifier
             .fillMaxSize()
             .padding(innerPadding)
-            .padding(horizontal = 0.dp),
-        verticalArrangement = Arrangement.spacedBy(4.dp)
+            .padding(horizontal = 0.dp)
     ) {
         item {
             if (events.isEmpty()) {
@@ -96,7 +96,7 @@ fun EventElement(
 ) {
     Row(
         Modifier
-            .background(Color.hsl(0f, 0f, 0.85f, 1f), RoundedCornerShape(10.dp))
+            .background(MaterialTheme.colorScheme.inverseOnSurface, RoundedCornerShape(10.dp))
             .padding(horizontal = 10.dp)
             .fillMaxWidth()
             .height(72.dp),
