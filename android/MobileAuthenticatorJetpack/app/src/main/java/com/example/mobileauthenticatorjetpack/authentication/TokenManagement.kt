@@ -25,9 +25,11 @@ interface JwtTokenManager {
     suspend fun saveAccessJwt(token: String)
     suspend fun saveRefreshJwt(token: String)
     suspend fun saveDeviceId(id: String)
+    suspend fun saveDeviceName(name: String)
     suspend fun getAccessJwt(): String?
     suspend fun getRefreshJwt(): String?
     suspend fun getDeviceId(): String?
+    suspend fun getDeviceName(): String?
     suspend fun clearAllTokens()
 }
 
@@ -38,6 +40,7 @@ class JwtTokenDataStore @Inject constructor(private val dataStore: DataStore<Pre
         val ACCESS_JWT_KEY = stringPreferencesKey("access_jwt")
         val REFRESH_JWT_KEY = stringPreferencesKey("refresh_jwt")
         val DEVICE_ID = stringPreferencesKey("device_id")
+        val DEVICE_NAME = stringPreferencesKey("device_name")
     }
 
     override suspend fun saveAccessJwt(token: String) {
@@ -58,6 +61,12 @@ class JwtTokenDataStore @Inject constructor(private val dataStore: DataStore<Pre
         }
     }
 
+    override suspend fun saveDeviceName(name: String) {
+        dataStore.edit { preferences ->
+            preferences[DEVICE_NAME] = name
+        }
+    }
+
     override suspend fun getAccessJwt(): String? {
         return dataStore.data.map { preferences ->
             preferences[ACCESS_JWT_KEY]
@@ -73,6 +82,12 @@ class JwtTokenDataStore @Inject constructor(private val dataStore: DataStore<Pre
     override suspend fun getDeviceId(): String? {
         return dataStore.data.map { preferences ->
             preferences[DEVICE_ID]
+        }.first()
+    }
+
+    override suspend fun getDeviceName(): String? {
+        return dataStore.data.map { preferences ->
+            preferences[DEVICE_NAME]
         }.first()
     }
 

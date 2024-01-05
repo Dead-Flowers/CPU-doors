@@ -19,7 +19,7 @@ import retrofit2.http.Path
 import java.util.Date
 import javax.inject.Singleton
 
-val BASE_URL = "http://192.168.1.17:8000/api/"
+val BASE_URL = "http://192.168.1.201:8000/api/"
 
 interface RefreshTokenService {
     @POST("auth/token/refresh")
@@ -110,7 +110,10 @@ interface ControllersService {
     suspend fun getControllers(): Response<List<ControllerDto>>
 
     @GET("controllers/{id}")
-    suspend fun getController(id: String): Response<ControllerDto>
+    suspend fun getController(@Path(value = "id") id: String): Response<ControllerDto>
+
+    @GET("controllers/{id}/events")
+    suspend fun getControllerEvents(@Path(value = "id") id: String): Response<List<ControllerEventDto>>
 
     @POST("controllers/{id}/set-state")
     suspend fun setControllerState(@Path(value = "id") id: String, @Body body: SetControllerStateDto): Response<DeviceDto>
@@ -134,6 +137,14 @@ data class ControllerDto (
     val internalName: String,
     @field:SerializedName("given_name")
     val givenName: String,
+)
+
+data class ControllerEventDto(
+    val id: String,
+    @field:SerializedName("invoking_device")
+    val invokingDevice: String?,
+    val date: String,
+    val state: String
 )
 
 @Module

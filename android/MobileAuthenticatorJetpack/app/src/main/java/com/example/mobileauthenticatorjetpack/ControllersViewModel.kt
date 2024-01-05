@@ -1,9 +1,7 @@
 package com.example.mobileauthenticatorjetpack
 
 import android.content.Context
-import android.hardware.fingerprint.FingerprintManager
-import android.security.keystore.KeyGenParameterSpec
-import android.security.keystore.KeyProperties
+import android.content.Intent
 import android.util.Base64
 import android.widget.Toast
 import androidx.biometric.BiometricPrompt
@@ -20,13 +18,14 @@ import com.example.mobileauthenticatorjetpack.authentication.JwtTokenManager
 import com.example.mobileauthenticatorjetpack.authentication.SetControllerStateDto
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.security.KeyPairGenerator
 import java.security.KeyStore
 import java.security.PrivateKey
 import java.security.Signature
 import java.util.concurrent.Executor
 import javax.inject.Inject
 
+
+const val CONTROLLER_ID = "controller id"
 
 @HiltViewModel
 class ControllersViewModel @Inject constructor(
@@ -40,7 +39,7 @@ class ControllersViewModel @Inject constructor(
     fun getControllers(context: Context) {
         viewModelScope.launch {
             try {
-                var response = controllersService.getControllers();
+                val response = controllersService.getControllers();
                 if (response.isSuccessful && response.body() != null) {
                     controllers.value = response.body()!!
                 } else {
@@ -87,11 +86,6 @@ class ControllersViewModel @Inject constructor(
                         super.onAuthenticationSucceeded(result)
 
                         var signature = result.cryptoObject!!.signature!!
-                        if (signature == null) {
-                            Toast.makeText(context,
-                                "DUPA!", Toast.LENGTH_SHORT)
-                                .show()
-                        }
 
                         viewModelScope.launch {
                             try {
@@ -117,6 +111,7 @@ class ControllersViewModel @Inject constructor(
                                             "Authentication succeeded!", Toast.LENGTH_SHORT)
                                             .show()
                                     } else {
+                                        getControllers(context) // to refresh states of all controllers
                                         Toast.makeText(context,
                                             "Failed to validate signed token!", Toast.LENGTH_SHORT)
                                             .show()
@@ -158,6 +153,16 @@ class ControllersViewModel @Inject constructor(
 
             biometricPrompt.authenticate(promptInfo, cryptoObject)
         }
+    }
+
+    fun goToDetails(context: Context, controllerId: String) {
+        val controllerDetailsIntent = Intent(context, ControllerDetailsActivity::class.java)
+        controllerDetailsIntent.putExtra(CONTROLLER_ID, controllerId)
+        context.startActivity(controllerDetailsIntent)
+    }
+
+    fun onRefreshButtonClicked(context: Context) {
+        getControllers(context)
     }
 
     private fun getState(state: Boolean): String {

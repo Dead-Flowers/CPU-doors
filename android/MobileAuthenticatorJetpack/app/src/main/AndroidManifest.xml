@@ -38,6 +38,11 @@
             android:exported="true"
             android:theme="@style/Theme.MobileAuthenticatorJetpack">
         </activity>
+        <activity
+            android:name=".ControllerDetailsActivity"
+            android:exported="true"
+            android:theme="@style/Theme.MobileAuthenticatorJetpack">
+        </activity>
     </application>
 
 </manifest>

@@ -22,12 +22,16 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -37,6 +41,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
@@ -47,16 +52,31 @@ import androidx.compose.ui.unit.dp
 import com.example.mobileauthenticatorjetpack.LoginViewModel
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginForm(viewModel: LoginViewModel) {
     var credentials by remember { mutableStateOf(Credentials()) }
     val context = LocalContext.current
-    Surface {
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    titleContentColor = Color.White,
+                ),
+                title = {
+                    Text("Login")
+                }
+            )
+        },
+    ) { innerPadding ->
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
+                .padding(innerPadding)
                 .padding(horizontal = 30.dp)
         ) {
             LoginField(
@@ -64,27 +84,23 @@ fun LoginForm(viewModel: LoginViewModel) {
                 onChange = { data -> credentials = credentials.copy(login = data) },
                 modifier = Modifier.fillMaxWidth()
             )
+            Spacer(Modifier.height(5.dp))
             PasswordField(
                 value = credentials.pwd,
                 onChange = { data -> credentials = credentials.copy(pwd = data) },
                 submit = {
-                     if (!checkCredentials(credentials, context)) credentials = Credentials()
+                    if (!checkCredentials(credentials, context)) credentials = Credentials()
                 },
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(10.dp))
-            LabeledCheckbox(
-                label = "Remember Me",
-                onCheckChanged = { credentials = credentials.copy(remember = !credentials.remember) },
-                isChecked = credentials.remember
-            )
             Button(
                 onClick = {
-                      if (!checkCredentials(credentials, context)) {
-                          credentials = Credentials()
-                      } else {
-                          viewModel.login(credentials, context)
-                      }
+                    if (!checkCredentials(credentials, context)) {
+                        credentials = Credentials()
+                    } else {
+                        viewModel.login(credentials, context)
+                    }
                 },
                 enabled = true,
                 shape = RoundedCornerShape(5.dp),
@@ -97,26 +113,6 @@ fun LoginForm(viewModel: LoginViewModel) {
     DisposableEffect(Unit) {
         viewModel.useRefreshToken(context)
         onDispose {}
-    }
-}
-
-@Composable
-fun LabeledCheckbox(
-    label: String,
-    onCheckChanged: () -> Unit,
-    isChecked: Boolean
-) {
-
-    Row(
-        Modifier
-            .clickable(
-                onClick = onCheckChanged
-            )
-            .padding(4.dp)
-    ) {
-        Checkbox(checked = isChecked, onCheckedChange = null)
-        Spacer(Modifier.size(6.dp))
-        Text(label)
     }
 }
 
