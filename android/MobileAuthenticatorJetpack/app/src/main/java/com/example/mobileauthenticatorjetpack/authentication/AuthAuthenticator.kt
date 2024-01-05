@@ -27,7 +27,9 @@ class AuthAuthenticator @Inject constructor(
                 tokenManager.getRefreshJwt()
             }
             val token = if (currentToken != updatedToken) updatedToken else {
-                val newSessionResponse = runBlocking { refreshTokenService.refreshToken(RefreshRequest(refreshToken!!)) }
+                val newSessionResponse = runBlocking { refreshTokenService.refreshToken(
+                    RefreshRequest(refreshToken!!)
+                ) }
                 if (newSessionResponse.isSuccessful && newSessionResponse.body() != null) {
                     newSessionResponse.body()?.let { body ->
                         runBlocking {

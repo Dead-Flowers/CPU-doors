@@ -1,9 +1,8 @@
-package com.example.mobileauthenticatorjetpack
+package com.example.mobileauthenticatorjetpack.devicemanagement
 
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.widget.Toast
@@ -11,10 +10,8 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.mobileauthenticatorjetpack.authentication.AddDeviceRequest
-import com.example.mobileauthenticatorjetpack.authentication.DeviceDto
-import com.example.mobileauthenticatorjetpack.authentication.DeviceService
 import com.example.mobileauthenticatorjetpack.authentication.JwtTokenManager
+import com.example.mobileauthenticatorjetpack.controllers.MainActivity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.security.KeyPair
@@ -75,11 +72,13 @@ class DeviceManagementViewModel @Inject constructor(
 
         viewModelScope.launch {
             try {
-                val response = deviceService.addDevice(AddDeviceRequest(
+                val response = deviceService.addDevice(
+                    AddDeviceRequest(
                     userPwd,
                     userDefinedDeviceName,
                     Base64.getEncoder().encodeToString(keyPair.public.encoded)
-                ))
+                )
+                )
                 if (response.isSuccessful && response.body() != null) {
                     currentDeviceId.value = response.body()!!.id
                     jwtTokenManager.saveDeviceId(response.body()!!.id)

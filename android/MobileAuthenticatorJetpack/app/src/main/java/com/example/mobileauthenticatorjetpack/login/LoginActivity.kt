@@ -1,10 +1,9 @@
-package com.example.mobileauthenticatorjetpack
+package com.example.mobileauthenticatorjetpack.login
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import com.example.mobileauthenticatorjetpack.interfaces.LoginForm
 import com.example.mobileauthenticatorjetpack.ui.theme.MobileAuthenticatorJetpackTheme
 import dagger.hilt.android.AndroidEntryPoint
 

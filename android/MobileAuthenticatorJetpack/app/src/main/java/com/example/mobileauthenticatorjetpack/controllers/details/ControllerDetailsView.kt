@@ -1,4 +1,4 @@
-package com.example.mobileauthenticatorjetpack.interfaces
+package com.example.mobileauthenticatorjetpack.controllers.details
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -29,7 +29,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.mobileauthenticatorjetpack.ControllerDetailsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

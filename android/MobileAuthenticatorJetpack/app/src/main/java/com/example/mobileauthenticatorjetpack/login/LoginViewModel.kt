@@ -1,4 +1,4 @@
-package com.example.mobileauthenticatorjetpack
+package com.example.mobileauthenticatorjetpack.login
 
 import android.app.Activity
 import android.content.Context
@@ -13,7 +13,7 @@ import com.example.mobileauthenticatorjetpack.authentication.JwtTokenManager
 import com.example.mobileauthenticatorjetpack.authentication.LoginRequest
 import com.example.mobileauthenticatorjetpack.authentication.RefreshRequest
 import com.example.mobileauthenticatorjetpack.authentication.RefreshTokenService
-import com.example.mobileauthenticatorjetpack.interfaces.Credentials
+import com.example.mobileauthenticatorjetpack.devicemanagement.DeviceManagementActivity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -36,7 +36,6 @@ class LoginViewModel @Inject constructor(
                     if (response.isSuccessful && response.body() != null) {
                         tokenManager.saveAccessJwt(response.body()!!.access);
                         tokenManager.saveRefreshJwt(response.body()!!.refresh);
-//                        Toast.makeText(context, "Logged in", Toast.LENGTH_SHORT).show()
                         context.startActivity(Intent(context, DeviceManagementActivity::class.java))
                         (context as Activity).finish()
                     }

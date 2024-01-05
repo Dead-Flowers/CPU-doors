@@ -1,4 +1,4 @@
-package com.example.mobileauthenticatorjetpack.interfaces
+package com.example.mobileauthenticatorjetpack.controllers
 
 import android.content.Context
 import androidx.compose.foundation.background
@@ -32,7 +32,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.mobileauthenticatorjetpack.ControllersViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -71,7 +70,7 @@ fun ControllersListView(viewModel: ControllersViewModel) {
             .padding(horizontal = 0.dp)
     ) {
         items(doors) {
-                door -> ControllerElement(controllerId = door.id, name = door.givenName, state = door.state, viewModel, context)
+                door -> ControllerElement(controllerId = door.id, name = door.givenName, state = door.state, stateChangeEnabled = door.isOnline, viewModel, context)
         }
     }
         DisposableEffect(Unit) {
@@ -86,6 +85,7 @@ fun ControllerElement(
     controllerId: String,
     name: String,
     state: String?,
+    stateChangeEnabled: Boolean,
     viewModel: ControllersViewModel,
     context: Context,
 ) {
@@ -100,8 +100,15 @@ fun ControllerElement(
     ) {
         Text(text = name, fontSize=24.sp)
         Spacer(Modifier.weight(1f))
-        Switch(checked = state != null && state.lowercase() == "open", onCheckedChange = {
-            viewModel.changeControllerState(context, controllerId, it.not(), it)
-        })
+        if (!stateChangeEnabled) {
+            Text(text = "Device disabled", fontSize = 14.sp)
+        }
+        Switch(
+            checked = state != null && state.lowercase() == "open",
+            onCheckedChange = {
+                viewModel.changeControllerState(context, controllerId, it.not(), it)
+            },
+            enabled = stateChangeEnabled
+        )
     }
 }

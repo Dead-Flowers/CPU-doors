@@ -1,4 +1,4 @@
-package com.example.mobileauthenticatorjetpack.interfaces
+package com.example.mobileauthenticatorjetpack.devicemanagement
 
 import android.os.Build
 import androidx.compose.foundation.layout.Arrangement
@@ -29,7 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.mobileauthenticatorjetpack.DeviceManagementViewModel
+import com.example.mobileauthenticatorjetpack.login.PasswordField
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

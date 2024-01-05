@@ -19,7 +19,7 @@
         android:name=".AuthApplication"
         tools:targetApi="31">
         <activity
-            android:name="com.example.mobileauthenticatorjetpack.LoginActivity"
+            android:name="com.example.mobileauthenticatorjetpack.login.LoginActivity"
             android:exported="true" >
 
             <intent-filter>
@@ -29,17 +29,17 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DeviceManagementActivity"
+            android:name=".devicemanagement.DeviceManagementActivity"
             android:exported="true"
             android:theme="@style/Theme.MobileAuthenticatorJetpack">
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".controllers.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.MobileAuthenticatorJetpack">
         </activity>
         <activity
-            android:name=".ControllerDetailsActivity"
+            android:name=".controllers.details.ControllerDetailsActivity"
             android:exported="true"
             android:theme="@style/Theme.MobileAuthenticatorJetpack">
         </activity>

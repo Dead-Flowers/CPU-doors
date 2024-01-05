@@ -1,4 +1,4 @@
-package com.example.mobileauthenticatorjetpack
+package com.example.mobileauthenticatorjetpack.controllers
 
 import android.content.Context
 import android.content.Intent
@@ -11,11 +11,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.mobileauthenticatorjetpack.authentication.ControllerDto
-import com.example.mobileauthenticatorjetpack.authentication.ControllersService
-import com.example.mobileauthenticatorjetpack.authentication.DeviceService
 import com.example.mobileauthenticatorjetpack.authentication.JwtTokenManager
-import com.example.mobileauthenticatorjetpack.authentication.SetControllerStateDto
+import com.example.mobileauthenticatorjetpack.controllers.details.ControllerDetailsActivity
+import com.example.mobileauthenticatorjetpack.devicemanagement.DeviceService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.security.KeyStore
@@ -104,8 +102,9 @@ class ControllersViewModel @Inject constructor(
 
                                     var signedResponse = controllersService.setControllerState(controllerId, SetControllerStateDto(
                                         token, signedToken, getState(currentState), getState(newState)
-                                    ))
-                                    if (signedResponse.isSuccessful && signedResponse.body() != null) {
+                                    )
+                                    )
+                                    if (signedResponse.isSuccessful) {
                                         getControllers(context)
                                         Toast.makeText(context,
                                             "Authentication succeeded!", Toast.LENGTH_SHORT)

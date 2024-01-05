@@ -1,4 +1,4 @@
-package com.example.mobileauthenticatorjetpack
+package com.example.mobileauthenticatorjetpack.controllers.details
 
 import android.app.Activity
 import android.content.Context
@@ -7,8 +7,8 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.mobileauthenticatorjetpack.authentication.ControllerEventDto
-import com.example.mobileauthenticatorjetpack.authentication.ControllersService
+import com.example.mobileauthenticatorjetpack.controllers.ControllerEventDto
+import com.example.mobileauthenticatorjetpack.controllers.ControllersService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
