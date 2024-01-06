@@ -45,8 +45,12 @@ data class ControllerDto (
 
 data class ControllerEventDto(
     val id: String,
-    @field:SerializedName("invoking_device")
-    val invokingDevice: String?,
+    val invoker: ControllerEventInvokerDto?,
     val date: String,
     val state: String
+)
+
+data class ControllerEventInvokerDto(
+    val user: String,
+    val device: String?,
 )

@@ -2,12 +2,12 @@ package com.example.mobileauthenticatorjetpack.retrofit
 
 import com.example.mobileauthenticatorjetpack.authentication.AuthService
 import com.example.mobileauthenticatorjetpack.authentication.AuthenticatedClient
-import com.example.mobileauthenticatorjetpack.authentication.MeService
 import com.example.mobileauthenticatorjetpack.authentication.PublicClient
 import com.example.mobileauthenticatorjetpack.authentication.RefreshTokenService
 import com.example.mobileauthenticatorjetpack.authentication.TokenRefreshClient
 import com.example.mobileauthenticatorjetpack.controllers.ControllersService
 import com.example.mobileauthenticatorjetpack.devicemanagement.DeviceService
+import com.example.mobileauthenticatorjetpack.registration.RegistrationService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -47,13 +47,13 @@ class RetrofitClientModule {
 
     @Provides
     @Singleton
-    fun provideMeApi(@AuthenticatedClient okHttpClient: OkHttpClient): MeService {
+    fun provideRegisterApi(@AuthenticatedClient okHttpClient: OkHttpClient): RegistrationService {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build()
-            .create(MeService::class.java)
+            .create(RegistrationService::class.java)
     }
 
     @Provides

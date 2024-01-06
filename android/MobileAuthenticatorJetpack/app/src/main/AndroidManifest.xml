@@ -29,6 +29,11 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".registration.UserRegistrationActivity"
+            android:exported="true"
+            android:theme="@style/Theme.MobileAuthenticatorJetpack">
+        </activity>
+        <activity
             android:name=".devicemanagement.DeviceManagementActivity"
             android:exported="true"
             android:theme="@style/Theme.MobileAuthenticatorJetpack">

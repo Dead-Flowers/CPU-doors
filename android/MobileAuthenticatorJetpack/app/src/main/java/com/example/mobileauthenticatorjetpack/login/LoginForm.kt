@@ -65,42 +65,54 @@ fun LoginForm(viewModel: LoginViewModel) {
             )
         },
     ) { innerPadding ->
-        Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(horizontal = 30.dp)
-        ) {
-            LoginField(
-                value = credentials.login,
-                onChange = { data -> credentials = credentials.copy(login = data) },
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(Modifier.height(5.dp))
-            PasswordField(
-                value = credentials.pwd,
-                onChange = { data -> credentials = credentials.copy(pwd = data) },
-                submit = {
-                    if (!checkCredentials(credentials, context)) credentials = Credentials()
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-            Button(
-                onClick = {
-                    if (!checkCredentials(credentials, context)) {
-                        credentials = Credentials()
-                    } else {
-                        viewModel.login(credentials, context)
-                    }
-                },
-                enabled = true,
-                shape = RoundedCornerShape(5.dp),
-                modifier = Modifier.fillMaxWidth()
+        if (!viewModel.isCheckingSavedToken.value) {
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(horizontal = 30.dp)
             ) {
-                Text("Login")
+                LoginField(
+                    value = credentials.login,
+                    onChange = { data -> credentials = credentials.copy(login = data) },
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(Modifier.height(5.dp))
+                PasswordField(
+                    value = credentials.pwd,
+                    onChange = { data -> credentials = credentials.copy(pwd = data) },
+                    submit = {
+                        if (!checkCredentials(credentials, context)) credentials = Credentials()
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                Button(
+                    onClick = {
+                        if (!checkCredentials(credentials, context)) {
+                            credentials = Credentials()
+                        } else {
+                            viewModel.login(credentials, context)
+                        }
+                    },
+                    enabled = true,
+                    shape = RoundedCornerShape(5.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Login")
+                }
+                Button(
+                    onClick = {
+                        viewModel.goToRegister(context)
+                    },
+                    enabled = true,
+                    shape = RoundedCornerShape(5.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Register")
+                }
             }
         }
     }

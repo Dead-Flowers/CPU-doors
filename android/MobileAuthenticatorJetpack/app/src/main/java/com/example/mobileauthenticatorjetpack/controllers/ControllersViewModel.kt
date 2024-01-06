@@ -1,5 +1,6 @@
 package com.example.mobileauthenticatorjetpack.controllers
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.util.Base64
@@ -14,6 +15,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.mobileauthenticatorjetpack.authentication.JwtTokenManager
 import com.example.mobileauthenticatorjetpack.controllers.details.ControllerDetailsActivity
 import com.example.mobileauthenticatorjetpack.devicemanagement.DeviceService
+import com.example.mobileauthenticatorjetpack.login.LoginActivity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.security.KeyStore
@@ -162,6 +164,15 @@ class ControllersViewModel @Inject constructor(
 
     fun onRefreshButtonClicked(context: Context) {
         getControllers(context)
+    }
+
+    fun logoutUser(context: Context) {
+        viewModelScope.launch {
+            jwtTokenManager.clearUserTokens()
+            context.startActivity(Intent(context, LoginActivity::class.java))
+            (context as Activity).finish()
+        }
+
     }
 
     private fun getState(state: Boolean): String {

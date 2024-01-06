@@ -7,6 +7,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.mobileauthenticatorjetpack.authentication.JwtTokenManager
 import com.example.mobileauthenticatorjetpack.controllers.ControllerEventDto
 import com.example.mobileauthenticatorjetpack.controllers.ControllersService
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,6 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ControllerDetailsViewModel @Inject constructor(
     private val controllersService: ControllersService,
+    private val jwtTokenManager: JwtTokenManager
 ) : ViewModel() {
 
     val controllerEvents: MutableState<List<ControllerEventDto>> = mutableStateOf(emptyList())

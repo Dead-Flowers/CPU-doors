@@ -21,6 +21,8 @@ interface DeviceService {
 //    suspend fun deleteDevice(deviceId: String): Void
 
     //TODO: add remove device with POST
+    @POST("users/devices/{id}/remove")
+    suspend fun removeDevice(@Path(value = "id") id: String, @Body body: RemoveDeviceDto): Response<Void>
 
     @GET("users/devices/{id}/challenge")
     suspend fun challengeDevice(@Path(value = "id") id: String): Response<ChallengeDeviceDto>
@@ -29,6 +31,13 @@ interface DeviceService {
 data class ChallengeDeviceDto(
     @field:SerializedName("challenge_token")
     val challengeToken: String
+)
+
+data class RemoveDeviceDto(
+    @field:SerializedName("challenge_token")
+    val challengeToken: String,
+    @field:SerializedName("challenge_token_signature")
+    val challengeTokenSignature: String
 )
 
 data class DeviceDto(

@@ -30,6 +30,8 @@ interface JwtTokenManager {
     suspend fun getDeviceId(): String?
     suspend fun getDeviceName(): String?
     suspend fun clearAllTokens()
+    suspend fun clearUserTokens()
+    suspend fun clearDevice()
 }
 
 class JwtTokenDataStore @Inject constructor(private val dataStore: DataStore<Preferences>) :
@@ -95,6 +97,20 @@ class JwtTokenDataStore @Inject constructor(private val dataStore: DataStore<Pre
             preferences.remove(ACCESS_JWT_KEY)
             preferences.remove(REFRESH_JWT_KEY)
             preferences.remove(DEVICE_ID)
+        }
+    }
+
+    override suspend fun clearUserTokens() {
+        dataStore.edit { preferences ->
+            preferences.remove(ACCESS_JWT_KEY)
+            preferences.remove(REFRESH_JWT_KEY)
+        }
+    }
+
+    override suspend fun clearDevice() {
+        dataStore.edit { preferences ->
+            preferences.remove(DEVICE_ID)
+            preferences.remove(DEVICE_NAME)
         }
     }
 }

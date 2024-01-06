@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.mobileauthenticatorjetpack.controllers.ControllerEventInvokerDto
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -62,7 +63,7 @@ fun ControllerDetailsView(
         modifier = Modifier
             .fillMaxSize()
             .padding(innerPadding)
-            .padding(horizontal = 0.dp)
+            .padding(horizontal = 10.dp)
     ) {
         item {
             if (events.isEmpty()) {
@@ -76,7 +77,7 @@ fun ControllerDetailsView(
             }
         }
         items(events) {
-                event -> EventElement(event.id, event.date, event.invokingDevice, event.state)
+                event -> EventElement(event.id, event.date, event.invoker, event.state)
         }
     }
         DisposableEffect(Unit) {
@@ -91,21 +92,29 @@ fun ControllerDetailsView(
 fun EventElement(
     eventId: String,
     date: String,
-    invokingDevice: String?,
-    state: String
+    invoker: ControllerEventInvokerDto?,
+    state: String,
 ) {
     Row(
         Modifier
-            .background(MaterialTheme.colorScheme.inverseOnSurface, RoundedCornerShape(10.dp))
+            .background(
+                if (state == "open") Color.Green.copy(alpha = 0.2f) else Color.Red.copy(
+                    alpha = 0.2f
+                ), RoundedCornerShape(20.dp)
+            )
             .padding(horizontal = 10.dp)
             .fillMaxWidth()
             .height(72.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column {
-            Text(text = invokingDevice ?: "EXTERNAL", fontSize=18.sp)
-            Text(text = date, fontSize = 12.sp)
-            Text(text = state, fontSize = 18.sp)
+            Text(text = state.uppercase(), fontSize = 18.sp)
+            Text(text = date, fontSize = 14.sp)
+            if (invoker != null) {
+                Text(text = "${invoker.user} from ${invoker.device}", fontSize=14.sp)
+            } else {
+                Text(text = "Controller", fontSize=14.sp)
+            }
         }
     }
 }
