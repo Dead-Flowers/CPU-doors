@@ -6,15 +6,18 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('users', '0002_alter_user_managers_userdevice'),
+        ("users", "0002_alter_user_managers_userdevice"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='userdevice',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='devices', to=settings.AUTH_USER_MODEL),
+            model_name="userdevice",
+            name="user",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="devices",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]

@@ -5,30 +5,29 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('controllers', '0001_initial'),
+        ("controllers", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='controllerdevice',
-            options={'ordering': ('internal_name',)},
+            name="controllerdevice",
+            options={"ordering": ("internal_name",)},
         ),
         migrations.RenameField(
-            model_name='controllerdevice',
-            old_name='device_name',
-            new_name='internal_name',
+            model_name="controllerdevice",
+            old_name="device_name",
+            new_name="internal_name",
         ),
         migrations.AddField(
-            model_name='controllerdevice',
-            name='given_name',
-            field=models.CharField(default='', max_length=64),
+            model_name="controllerdevice",
+            name="given_name",
+            field=models.CharField(default="", max_length=64),
             preserve_default=False,
         ),
         migrations.AlterUniqueTogether(
-            name='controllerdevice',
-            unique_together={('user', 'given_name')},
+            name="controllerdevice",
+            unique_together={("user", "given_name")},
         ),
     ]

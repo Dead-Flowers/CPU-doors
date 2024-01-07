@@ -12,16 +12,37 @@ services:
       - ./mosquitto/cert:/mosquitto/cert
       - mosquitto_data:/mosquitto/data
       - mosquitto_log:/mosquitto/log
+  postgres:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data:cached
+  backend-mqtt:
+    build:
+      context: backend/src
+      dockerfile: Dockerfile
+    entrypoint: python manage.py run_mqtt_consumer
+    tty: true
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://postgres:password@postgres:5432/postgres
+    depends_on:
+      - postgres
   backend:
     build:
       context: backend/src
       dockerfile: Dockerfile
     tty: true
-    volumes:
-      - ./backend/src/db.sqlite3:/app/db.sqlite3
     ports:
       - "0.0.0.0:8000:8000"
     restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://postgres:password@postgres:5432/postgres
+    depends_on:
+      - postgres
 volumes:
   mosquitto_data:
   mosquitto_log:
+  postgres_data:

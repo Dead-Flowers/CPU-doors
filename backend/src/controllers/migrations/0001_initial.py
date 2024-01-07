@@ -7,39 +7,76 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('users', '0002_alter_user_managers_userdevice'),
+        ("users", "0002_alter_user_managers_userdevice"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ControllerDevice',
+            name="ControllerDevice",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, primary_key=True, serialize=False)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('device_name', models.CharField(max_length=64, unique=True)),
-                ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4, primary_key=True, serialize=False
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("device_name", models.CharField(max_length=64, unique=True)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'ordering': ('device_name',),
+                "ordering": ("device_name",),
             },
         ),
         migrations.CreateModel(
-            name='ControllerDeviceStateEvent',
+            name="ControllerDeviceStateEvent",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, primary_key=True, serialize=False)),
-                ('date', models.DateTimeField(auto_now_add=True)),
-                ('was_acknowledged', models.BooleanField(default=False)),
-                ('state', models.CharField(choices=[('open', 'Open'), ('closed', 'Closed')], max_length=16)),
-                ('controller', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='state_events', to='controllers.controllerdevice')),
-                ('invoking_device', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='users.userdevice')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4, primary_key=True, serialize=False
+                    ),
+                ),
+                ("date", models.DateTimeField(auto_now_add=True)),
+                ("was_acknowledged", models.BooleanField(default=False)),
+                (
+                    "state",
+                    models.CharField(
+                        choices=[("open", "Open"), ("closed", "Closed")], max_length=16
+                    ),
+                ),
+                (
+                    "controller",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="state_events",
+                        to="controllers.controllerdevice",
+                    ),
+                ),
+                (
+                    "invoking_device",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="users.userdevice",
+                    ),
+                ),
             ],
             options={
-                'ordering': ('controller', '-date'),
+                "ordering": ("controller", "-date"),
             },
         ),
     ]

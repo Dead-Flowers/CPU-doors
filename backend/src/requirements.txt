@@ -4,3 +4,6 @@ django-ninja==1.1.0
 django-ninja-extra==0.20.2
 django-cors-headers==4.3.1
 cryptography==41.0.7
+django-environ==0.10.0
+paho-mqtt==1.6.1
+psycopg2-binary==2.9.9
