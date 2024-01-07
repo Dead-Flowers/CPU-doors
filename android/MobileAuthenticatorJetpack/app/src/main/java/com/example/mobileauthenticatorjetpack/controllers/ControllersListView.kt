@@ -70,6 +70,7 @@ fun ControllersListView(viewModel: ControllersViewModel) {
                     IconButton(onClick = { menuExpanded = !menuExpanded }) {
                         Icon(
                             imageVector = Icons.Filled.MoreVert,
+                            tint = Color.White,
                             contentDescription = "More"
                         )
                     }

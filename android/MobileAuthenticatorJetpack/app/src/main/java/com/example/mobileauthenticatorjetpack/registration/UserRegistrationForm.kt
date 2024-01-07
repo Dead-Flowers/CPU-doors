@@ -9,8 +9,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -46,7 +50,12 @@ fun UserRegistrationForm(viewModel: UserRegistrationViewModel) {
                     ),
                     title = {
                         Text("Registration")
-                    }
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = {viewModel.goBackToLogin(context)}) {
+                            Icon(Icons.Rounded.ArrowBack, "")
+                        }
+                    },
                 )
             },
         ) { innerPadding ->
@@ -75,7 +84,8 @@ fun UserRegistrationForm(viewModel: UserRegistrationViewModel) {
                         value = formData.confirmedPwd,
                         onChange = { data -> formData = formData.copy(confirmedPwd = data) },
                         submit = {},
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        label = "Confirm Password"
                     )
                     Spacer(modifier = Modifier.height(10.dp))
                     Button(
