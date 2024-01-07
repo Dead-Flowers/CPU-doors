@@ -3,15 +3,19 @@ package com.example.mobileauthenticatorjetpack.registration
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,6 +34,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.example.mobileauthenticatorjetpack.login.LoginField
 import com.example.mobileauthenticatorjetpack.login.PasswordField
@@ -88,6 +95,20 @@ fun UserRegistrationForm(viewModel: UserRegistrationViewModel) {
                         label = "Confirm Password"
                     )
                     Spacer(modifier = Modifier.height(10.dp))
+                    Row(){
+                        Checkbox(checked = true, onCheckedChange = {})
+                        Spacer(modifier = Modifier.width(5.dp))
+                        ClickableText(text = buildAnnotatedString {
+                                append("I agree to ")
+                                withStyle(style = SpanStyle(color=MaterialTheme.colorScheme.primary)) {
+                                    append("Terms and Conditions")
+                                }
+                                append(" and ")
+                                withStyle(style = SpanStyle(color=MaterialTheme.colorScheme.primary)) {
+                                    append("Privacy Policy")
+                                }
+                        }, onClick = {})
+                    }
                     Button(
                         onClick = {
                             if (!isRegistrationFormValid(formData)) {
